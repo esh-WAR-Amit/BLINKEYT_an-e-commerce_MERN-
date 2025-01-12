@@ -20,11 +20,11 @@ const sendEmail = async ({ sendTo, subject, html }) => {
     if (error) {
       return console.error({ error });
     }
+
+    return data;
   } catch (error) {
     console.log(error);
   }
-
-  return data;
 };
 
 export default sendEmail;
