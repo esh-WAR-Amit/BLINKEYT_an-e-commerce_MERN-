@@ -47,14 +47,40 @@ export async function registerUserController(request, response) {
 
     const verifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
 
-    const verifyEmail = await sendEmail({
-      sendTo: email,
-      subject: "Verify e-mail from BLINKEYIT",
-      html: verifyEmailTemplate({
-        name,
-        url: verifyEmailUrl,
-      }),
-    });
+    //*****************Immediately invoked function expression*****************ie sendEmail is a function call...
+    // const verifyEmail = await sendEmail({
+    //   sendTo: email,
+    //   subject: "Verify e-mail from BLINKEYIT",
+    //   html: verifyEmailTemplate({
+    //     name,
+    //     url: verifyEmailUrl,
+    //   }),
+    // });
+
+    async function verifyEmail(email, name, verifyEmailUrl) {
+      console.log("Verify email", email);
+      try {
+        const result = await sendEmail({
+          sendTo: email,
+          subject: "Verify e-mail from BLINKEYIT",
+          html: verifyEmailTemplate({
+            name,
+            url: verifyEmailUrl,
+          }),
+        });
+        console.log("Email sent successfully:", result);
+        return result;
+      } catch (error) {
+        console.error("Error sending email:", error);
+        throw error;
+      }
+    }
+
+    verifyEmail(email, name, verifyEmailUrl);
+
+    console.log("Email:", email);
+    console.log("Name:", name);
+    console.log("Verify Email URL:", verifyEmailUrl);
 
     return response.json({
       message: "User created successfully",
