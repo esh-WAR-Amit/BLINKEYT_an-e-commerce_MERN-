@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import Search from "./Search";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import useMobile from "../hooks/useMobile";
 import { FaCartArrowDown } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { GoTriangleUp, GoTriangleDown } from "react-icons/go";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
   const [isMobile] = useMobile();
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
+  const user = useSelector((state) => state?.user);
+  const [openUserMenu, setopenUserMenu] = useState(false);
+
+  console.log("user from store", user);
 
   const redirectToLoginPage = () => {
     navigate("/login");
@@ -54,9 +61,32 @@ const Header = () => {
             {/**user icons display in only desktop version */}
 
             <div className="hidden lg:flex items-center gap-10">
-              <button onClick={redirectToLoginPage} className="text-lg px-2">
-                Login
-              </button>
+              {user?._id ? (
+                <div className="relative">
+                  <div
+                    onClick={() => setopenUserMenu((preve) => !preve)}
+                    className="flex select-none items-center gap-2 cursor-pointer"
+                  >
+                    <p>Account</p>
+                    {openUserMenu ? (
+                      <GoTriangleUp size={25} />
+                    ) : (
+                      <GoTriangleDown size={25} />
+                    )}
+                  </div>
+                  {openUserMenu && (
+                    <div className="absolute right-0 top-12">
+                      <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
+                        <UserMenu />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button onClick={redirectToLoginPage} className="text-lg px-2">
+                  Login
+                </button>
+              )}
               <button className="flex items-center gap-2 bg-green-800 hover:bg-green-700 p-3 rounded text-white">
                 {/**add to cart icon */}
                 <div className="animate-bounce">
