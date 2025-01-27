@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Divider from "./Divider";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
@@ -12,6 +12,7 @@ import AxiosToastError from "../utils/AxiosToastError";
 const UserMenu = ({ close }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -20,10 +21,13 @@ const UserMenu = ({ close }) => {
       });
 
       if (response.data.success) {
-        close();
+        if (close) {
+          close();
+        }
         dispatch(logout());
         localStorage.clear();
         toast.success(response.data.message);
+        navigate("/");
       }
     } catch (error) {
       AxiosToastError(error);
