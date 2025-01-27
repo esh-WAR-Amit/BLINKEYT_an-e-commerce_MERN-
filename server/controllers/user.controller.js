@@ -467,7 +467,7 @@ export async function refreshToken(request, response) {
   try {
     const refreshToken =
       request.cookies.refreshToken ||
-      request?.header?.authorization?.split(" ")[1]; //'Bearer token' => [Bearer token]
+      request?.headers?.authorization?.split(" ")[1]; //'Bearer token' => [Bearer token]
 
     if (!refreshToken) {
       return response.status(401).json({
