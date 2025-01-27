@@ -15,12 +15,16 @@ const Header = () => {
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
   const user = useSelector((state) => state?.user);
-  const [openUserMenu, setopenUserMenu] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
 
   console.log("user from store", user);
 
   const redirectToLoginPage = () => {
     navigate("/login");
+  };
+
+  const handleCloseUserMenu = () => {
+    setOpenUserMenu(false);
   };
 
   return (
@@ -64,7 +68,7 @@ const Header = () => {
               {user?._id ? (
                 <div className="relative">
                   <div
-                    onClick={() => setopenUserMenu((preve) => !preve)}
+                    onClick={() => setOpenUserMenu((preve) => !preve)}
                     className="flex select-none items-center gap-2 cursor-pointer"
                   >
                     <p>Account</p>
@@ -77,7 +81,7 @@ const Header = () => {
                   {openUserMenu && (
                     <div className="absolute right-0 top-12">
                       <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
-                        <UserMenu />
+                        <UserMenu close={handleCloseUserMenu} />
                       </div>
                     </div>
                   )}
