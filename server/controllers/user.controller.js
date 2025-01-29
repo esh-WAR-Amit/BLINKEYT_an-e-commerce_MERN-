@@ -251,6 +251,8 @@ export async function uploadAvatar(request, response) {
 
     return response.json({
       message: "Profile uploaded successfully",
+      error: false,
+      success: true,
       data: {
         _id: userId,
         avatar: upload.url,
